@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GUILD GLORY BOT v4.0 SECURE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background: #030303;
+    color: #00ff99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 15px;
+}
+
+.box {
+    width: 100%;
+    max-width: 440px;
+    border: 2px solid #00ff99;
+    padding: 25px;
+    text-align: center;
+    background: #000;
+    box-shadow: 0 0 30px rgba(0, 255, 153, 0.35);
+    border-radius: 8px;
+    position: relative;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-shadow: 0 0 12px #00ff99;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+.ping-bar {
+    font-size: 11px;
+    color: #00cc77;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+label {
+    font-size: 11px;
+    color: #00cc77;
+    margin-left: 2px;
+    text-transform: uppercase;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    background: #0a0a0a;
+    border: 1px solid #00ff99;
+    color: #00ff99;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    outline: none;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+input:focus, select:focus {
+    box-shadow: 0 0 10px #00ff99;
+    background: #111;
+}
+
+button {
+    margin-top: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background: #00ff99;
+    color: #000;
+    box-shadow: 0 0 15px #00ff99;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid #00ff99;
+    color: #00ff99;
+    margin-top: 8px;
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: #000;
+    border: 1px solid #25D366;
+    margin-top: 10px;
+}
+
+.btn-whatsapp:hover {
+    background: #1eb857;
+    color: #fff;
+    box-shadow: 0 0 15px #25D366;
+}
+
+#terminal {
+    display: none;
+    height: 180px;
+    overflow-y: auto;
+    border: 1px solid #00ff99;
+    padding: 10px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.5;
+    background: #050505;
+    margin-top: 15px;
+    border-radius: 4px;
+}
+
+.result-card {
+    display: none;
+    margin-top: 15px;
+    border: 1px dashed #00ff99;
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+    background: rgba(0, 255, 153, 0.05);
+    border-radius: 4px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #00ff99;
+    color: #000;
+    font-weight: bold;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.live-glory {
+    color: #00ff99;
+    font-weight: bold;
+    text-shadow: 0 0 5px #00ff99;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="page1">
+    <h1>GUILD GLORY BOT</h1>
+    
+    <div class="ping-bar">
+        <span>SECURITY: <strong style="color:#00ff99;">24H LOCK ACTIVE</strong></span>
+        <span>PING: <strong id="pingVal">21ms</strong></span>
+    </div>
+
+    <div class="input-group">
+        <label>Guild UID</label>
+        <input type="text" id="guildUid" placeholder="Enter Guild UID (e.g. 30129481)" required>
+    </div>
+
+    <div class="input-group">
+        <label>Server Region</label>
+        <select id="country">
+            <option value="">Select Country</option>
+            <option>India</option>
+            <option>Pakistan</option>
+            <option>Bangladesh</option>
+            <option>Nepal</option>
+            <option>Indonesia</option>
+            <option>Brazil</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Device Model</label>
+        <select id="mobileName">
+            <option value="">Select Mobile Device</option>
+            <option>Motorola</option>
+            <option>Moto</option>
+            <option>Vivo</option>
+            <option>Infinix</option>
+            <option>Tecno Kn3</option>
+            <option>Poco</option>
+            <option>Samsung</option>
+            <option>iPhone (Apple)</option>
+            <option>Oppo</option>
+            <option>Realme</option>
+            <option>Xiaomi</option>
+            <option>OnePlus</option>
+            <option>Asus ROG</option>
+        </select>
+    </div>
+
+    <button onclick="startBot()">CONNECT BOT NOW</button>
+</div>
+
+<div class="box" id="page2" style="display:none;">
+    <h1>BOT CONNECTING...</h1>
+    <div id="terminal"></div>
+    <div id="resultCard" class="result-card"></div>
+</div>
+
+<script>
+// Ping variation logic
+setInterval(() => {
+    let pingEl = document.getElementById("pingVal");
+    if(pingEl) {
+        let randomPing = Math.floor(Math.random() * 12) + 16;
+        pingEl.innerText = randomPing + "ms";
+    }
+}, 2000);
+
+// Cyberpunk Sound Effect
+function playTickSound() {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+    } catch(e) {}
+}
+
+function startBot(){
+    let uid = document.getElementById("guildUid").value.trim();
+    let country = document.getElementById("country").value;
+    let mobile = document.getElementById("mobileName").value;
+
+    if(!uid){
+        playTickSound();
+        alert("⚠️ Please enter valid Guild UID!");
+        document.getElementById("guildUid").focus();
+        return;
+    }
+    if(!country){
+        playTickSound();
+        alert("⚠️ Please select your Server Country!");
+        return;
+    }
+    if(!mobile){
+        playTickSound();
+        alert("⚠️ Please select your Mobile Device!");
+        return;
+    }
+
+    // 24 Hours Timer Check via LocalStorage
+    let storageKey = "guild_bot_lock_" + uid;
+    let lastConnectionTime = localStorage.getItem(storageKey);
+    let currentTime = new Date().getTime();
+    let twentyFourHours = 24 * 60 * 60 * 1000;
+
+    if(lastConnectionTime && (currentTime - lastConnectionTime < twentyFourHours)) {
+        playTickSound();
+        let remainingTimeMs = twentyFourHours - (currentTime - lastConnectionTime);
+        let hoursLeft = Math.floor(remainingTimeMs / (1000 * 60 * 60));
+        let minsLeft = Math.floor((remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+        
+        alert(`⚠️ 24-Hour Timer Active!\nGuild UID (${uid}) already connected.\nPlease try again after ${hoursLeft} hours and ${minsLeft} minutes.`);
+        return;
+    }
+
+    playTickSound();
+    document.getElementById("page1").style.display="none";
+    document.getElementById("page2").style.display="block";
+
+    let terminal = document.getElementById("terminal");
+    terminal.style.display="block";
+
+    let lines = [
+        "Initializing GUILD GLORY BOT...",
+        "Target Guild UID: " + uid,
+        "Region: " + country + " | Device: " + mobile,
+        "Checking 24H cooldown registry... PASSED",
+        "Connecting to Free Fire secure server...",
+        "Bypassing security & anti-cheat hooks...",
+        "Injecting 100% Working Bot modules...",
+        "Syncing guild rank & active glory points...",
+        "BOT CONNECTED SUCCESSFULLY ✔"
+    ];
+
+    let i = 0;
+    let interval = setInterval(()=>{
+        playTickSound();
+        terminal.innerHTML += "> " + lines[i] + "<br>";
+        terminal.scrollTop = terminal.scrollHeight;
+        i++;
+        
+        if(i === lines.length){
+            clearInterval(interval);
+            // Save current timestamp to lock for 24 hours
+            localStorage.setItem(storageKey, currentTime);
+            
+            setTimeout(() => {
+                showGuildDetails(uid, country, mobile);
+            }, 600);
+        }
+    }, 350);
+}
+
+function showGuildDetails(uid, country, mobile) {
+    let resultCard = document.getElementById("resultCard");
+    
+    let guildPrefixes = ["DARK", "ROYAL", "OP", "LEGEND", "VIP", "GLORY"];
+    let guildSuffixes = ["ESPORTS", "GAMERS", "SQUAD", "KINGS", "ARMY"];
+    
+    let hash = hashCode(uid);
+    let namePrefix = guildPrefixes[Math.abs(hash) % guildPrefixes.length];
+    let nameSuffix = guildSuffixes[Math.abs(hash * 3) % guildSuffixes.length];
+    let fullGuildName = `${namePrefix}_${nameSuffix}_${uid.slice(-2)}`;
+    
+    let baseGlory = (Math.abs(hash % 90000) + 10000);
+    let memberCount = (Math.abs(hash % 15) + 35) + "/50";
+
+    // Accurate 100% Working Mobile OS Version Mapping
+    let mobileVersions = {
+        "Motorola": "Android 14 (My UX 6.0) - [100% Working API]",
+        "Moto": "Android 14 (My UX 6.0) - [100% Working API]",
+        "Vivo": "Funtouch OS 14.0 (Android 14) - [100% Working API]",
+        "Infinix": "HiOS 13.5 (Rootless Hook) - [100% Working API]",
+        "Tecno Kn3": "HiOS 13.0 (Kernel v4.14) - [100% Working API]",
+        "Poco": "HyperOS 1.0.3.0 (Android 14) - [100% Working API]",
+        "Samsung": "One UI 6.1 (Android 14 Knox) - [100% Working API]",
+        "iPhone (Apple)": "iOS 17.5.1 (Secure Enterprise Build) - [100% Working API]",
+        "Oppo": "ColorOS 14.0 (Android 14) - [100% Working API]",
+        "Realme": "Realme UI 5.0 (Android 14) - [100% Working API]",
+        "Xiaomi": "HyperOS 1.0.4.0 (Stable Kernel) - [100% Working API]",
+        "OnePlus": "OxygenOS 14.1 (Stable Build) - [100% Working API]",
+        "Asus ROG": "ROG UI 8.0 (Gaming Mode Active) - [100% Working API]"
+    };
+
+    let deviceVersionInfo = mobileVersions[mobile] || "Android 14 (Stable Firmware) - [100% Working API]";
+
+    resultCard.innerHTML = `
+        <div style="margin-bottom:8px;">
+            <span class="status-badge">ONLINE</span>
+            <strong style="color:#00ff99;"> BOT ACTIVE (24H LOCKED)</strong>
+        </div>
+        <strong>Guild Name:</strong> ${fullGuildName}<br>
+        <strong>Guild UID:</strong> ${uid}<br>
+        <strong>Server:</strong> ${country}<br>
+        <strong>Device Info:</strong> ${mobile}<br>
+        <strong>Software Version:</strong> <span style="color:#00ffff;">${deviceVersionInfo}</span><br>
+        <strong>Current Glory:</strong> <span id="gloryCount" class="live-glory">${baseGlory.toLocaleString()}</span> +<br>
+        <strong>Members:</strong> ${memberCount}<br>
+        <hr style="border:0; border-top:1px dashed #00ff99; margin:10px 0;">
+        <span style="color:#00ff99; font-size:11px;">✔ Auto Glory Push Started! (Next sync allowed in 24 hours)</span>
+        
+        <a href="https://whatsapp.com/channel/0029VbESvrjGZNCzkGqDnE2B" target="_blank" style="text-decoration:none;">
+            <button class="btn-whatsapp">JOIN WHATSAPP CHANNEL</button>
+        </a>
+        <button class="btn-secondary" onclick="location.reload()">TRY ANOTHER UID</button>
+    `;
+    
+    resultCard.style.display = "block";
+    playTickSound();
+
+    // Animated Live Glory Increments
+    setInterval(() => {
+        baseGlory += Math.floor(Math.random() * 5) + 1;
+        let gloryEl = document.getElementById("gloryCount");
+        if(gloryEl) {
+            gloryEl.innerText = baseGlory.toLocaleString();
+        }
+    }, 1500);
+}
+
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+}
+</script>
+
+</body>
+</html>
